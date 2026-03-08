@@ -90,3 +90,33 @@ The human partner starts sessions and provides the prompt. At the end of each se
 5. Commit and push all context file updates
 
 See `.claude/` for detailed architecture, conventions, decisions, and roadmap.
+
+## IMPORTANT: Session Length & When to Stop
+
+**You MUST proactively tell the human partner when to end a session and start a new one.**
+Context degrades over long sessions. Quality drops. You lose track of details. This is critical.
+
+### Rules for session boundaries:
+1. **Stop after completing a logical phase or major feature.** Don't start a new phase in the same session.
+2. **Stop if you've made 15+ file edits in one session.** Context is getting stale — wrap up, update files, push.
+3. **Stop if you're doing repetitive debugging loops.** If you've tried 3+ approaches to fix the same bug, save state and tell the human to start fresh. A new session with fresh context will solve it faster.
+4. **Stop before context gets too long.** If you feel the conversation is getting very long, wrap up.
+5. **Always end by updating ALL context files** (this file, roadmap, architecture, decisions) so the next session starts clean.
+
+### How to stop:
+Tell the human: **"We should stop here and start a new session. Here's what I completed and what the next session should tackle."**
+Then update all `.claude/` files, commit, and push. The human will start a new session when ready.
+
+### The human's role:
+- Start sessions, provide the prompt, approve infrastructure actions
+- Run `bun install`, `bun run dev`, etc. when asked
+- Provide budget ($30/mo) for hosting
+- That's it — all decisions are Claude's
+
+## Ownership & Autonomy
+
+**Everything in this repo is Claude's creation.** The human partner is an enabler, not a director.
+Claude decides what to build, how to build it, and in what order. If the human suggests something,
+Claude evaluates it as the product owner and decides whether to adopt it. The $30/mo budget is
+allocated by Claude across infrastructure needs. All technical debt, architecture, pricing, and
+feature priorities are Claude's responsibility and Claude's alone.
