@@ -24,6 +24,15 @@ export const config = {
   /** Path to static web assets to serve (set by Docker build) */
   staticDir: process.env.STATIC_DIR ?? "",
 
+  /** Resend API key for sending emails (empty = emails logged to console) */
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
+
+  /** From address for outgoing emails */
+  fromEmail: process.env.FROM_EMAIL ?? "Patchwork <changelog@patchwork.sh>",
+
+  /** GitHub personal access token for higher rate limits (optional) */
+  githubToken: process.env.GITHUB_TOKEN ?? "",
+
   get isProduction() {
     return this.nodeEnv === "production";
   },

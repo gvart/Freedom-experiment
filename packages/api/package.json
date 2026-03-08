@@ -12,8 +12,9 @@
   },
   "dependencies": {
     "@patchwork/core": "workspace:*",
-    "hono": "^4.7",
     "drizzle-orm": "^0.38",
+    "hono": "^4.7",
+    "resend": "^6.9.3",
     "ulid": "^2.3"
   },
   "devDependencies": {

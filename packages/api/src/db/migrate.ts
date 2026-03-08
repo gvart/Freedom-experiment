@@ -83,4 +83,11 @@ sqlite.exec(`
   CREATE INDEX IF NOT EXISTS idx_entry_views_entry_id ON entry_views(entry_id);
 `);
 
+// Add github_repo column to projects (idempotent)
+try {
+  sqlite.exec(`ALTER TABLE projects ADD COLUMN github_repo TEXT;`);
+} catch {
+  // Column already exists
+}
+
 console.log("Migrations complete.");

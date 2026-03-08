@@ -49,9 +49,18 @@ export const api = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (slug: string, data: { githubRepo?: string | null }) =>
+      request<ApiResponse<Project>>(`/projects/${slug}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
     delete: (slug: string) =>
       request<ApiResponse<{ deleted: boolean }>>(`/projects/${slug}`, {
         method: "DELETE",
+      }),
+    syncGithub: (slug: string) =>
+      request<ApiResponse<{ imported: number; total: number; skipped: number }>>(`/projects/${slug}/sync-github`, {
+        method: "POST",
       }),
   },
   entries: {
@@ -88,6 +97,10 @@ export const api = {
       request<ApiResponse<{ deleted: boolean }>>(`/projects/${slug}/entries/${id}`, {
         method: "DELETE",
       }),
+  },
+  subscribers: {
+    list: (slug: string) =>
+      request<ApiResponse<Array<{ id: string; email: string; confirmed: boolean; createdAt: string }>>>(`/projects/${slug}/subscribers`),
   },
   apiKeys: {
     list: (slug: string) =>

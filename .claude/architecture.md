@@ -122,11 +122,14 @@ GET    /api/projects/:slug/api-keys
 POST   /api/projects/:slug/api-keys
 DELETE /api/projects/:slug/api-keys/:keyId
 
-POST   /api/projects/:slug/subscribers
-DELETE /api/projects/:slug/subscribers/:token
+GET    /api/projects/:slug/subscribers     (List subscribers - protected)
+POST   /api/projects/:slug/subscribe     (Subscribe - public)
+GET    /api/subscribe/confirm/:token     (Confirm subscription - public)
+GET    /api/subscribe/unsubscribe/:token (Unsubscribe - public)
+POST   /api/projects/:slug/sync-github   (Import GitHub releases - protected)
 
 # Public pages (no auth)
-GET    /:slug                            (Public changelog page - HTML)
+GET    /:slug                            (Public changelog page - HTML, with subscribe form)
 GET    /:slug/feed.xml                   (RSS feed - XML)
 ```
 

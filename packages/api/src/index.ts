@@ -11,6 +11,7 @@ import apiKeys from "./routes/api-keys.js";
 import publicPages from "./routes/public.js";
 import widgetApi from "./routes/widget.js";
 import landing from "./routes/landing.js";
+import { subscriberPublicRoutes, subscriberProtectedRoutes } from "./routes/subscribers.js";
 
 const app = new Hono();
 
@@ -40,6 +41,11 @@ app.use("/api/projects", requireAuth);
 app.route("/api/projects", projects);
 app.route("/api/projects/:slug/entries", entries);
 app.route("/api/projects/:slug/api-keys", apiKeys);
+app.route("/api/projects/:slug/subscribers", subscriberProtectedRoutes);
+
+// Public subscriber routes (no auth)
+app.route("/api/projects", subscriberPublicRoutes);
+app.route("/api/subscribe", subscriberPublicRoutes);
 
 // Widget data API (public, no auth, open CORS for embeds)
 app.use(

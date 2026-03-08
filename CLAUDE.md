@@ -35,8 +35,8 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Session 7, 2026-03-08 — Search across entries + Analytics (view tracking)
-**Next up**: Deploy to Fly.io (`fly launch` + `fly deploy`), then remaining Phase 5 (email notifications via Resend, GitHub Releases sync)
+**Last completed**: Session 8, 2026-03-08 — Email subscriber notifications (Resend) + GitHub Releases sync
+**Next up**: Deploy to Fly.io (`fly launch` + `fly deploy`), then Phase 6 (Turso, Stripe, teams)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far

@@ -107,6 +107,14 @@ function renderChangelogPage(
     .footer a:hover { color: #374151; }
     .rss-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #6b7280; text-decoration: none; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 6px; }
     .rss-link:hover { color: #374151; border-color: #d1d5db; }
+    .subscribe-form { display: flex; gap: 8px; margin-top: 16px; }
+    .subscribe-form input[type="email"] { flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; outline: none; min-width: 0; }
+    .subscribe-form input[type="email"]:focus { border-color: ${primaryColor}; box-shadow: 0 0 0 2px ${primaryColor}22; }
+    .subscribe-form button { padding: 8px 16px; background: ${primaryColor}; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+    .subscribe-form button:hover { opacity: 0.9; }
+    .subscribe-msg { font-size: 13px; margin-top: 6px; }
+    .subscribe-msg.success { color: #16a34a; }
+    .subscribe-msg.error { color: #dc2626; }
   </style>
 </head>
 <body>
@@ -122,6 +130,15 @@ function renderChangelogPage(
       </a>
     </div>
   </div>
+  <div class="header" style="border-bottom:none;padding:0 0 8px">
+    <div class="container">
+      <form class="subscribe-form" id="subscribeForm" onsubmit="return false">
+        <input type="email" id="subEmail" placeholder="Get notified of updates — enter your email" required />
+        <button type="submit" id="subBtn">Subscribe</button>
+      </form>
+      <div id="subMsg" class="subscribe-msg"></div>
+    </div>
+  </div>
   <main class="container" style="padding-top:48px;padding-bottom:48px">
     ${entries.length === 0 ? '<p style="text-align:center;color:#9ca3af;padding:48px 0">No changelog entries published yet.</p>' : entriesHtml}
   </main>
@@ -134,6 +151,41 @@ function renderChangelogPage(
       var base = "${escapeHtml(baseUrl)}";
       ids.forEach(function(id){
         try { navigator.sendBeacon(base + "/api/v1/widget/track/" + id); } catch(e) {}
+      });
+
+      var form = document.getElementById("subscribeForm");
+      var emailInput = document.getElementById("subEmail");
+      var btn = document.getElementById("subBtn");
+      var msg = document.getElementById("subMsg");
+      form.addEventListener("submit", function() {
+        btn.disabled = true;
+        btn.textContent = "Subscribing...";
+        msg.textContent = "";
+        msg.className = "subscribe-msg";
+        fetch(base + "/api/projects/${project.slug}/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: emailInput.value })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.error) {
+            msg.textContent = data.error;
+            msg.className = "subscribe-msg error";
+          } else {
+            msg.textContent = data.message || "Subscribed!";
+            msg.className = "subscribe-msg success";
+            emailInput.value = "";
+          }
+          btn.disabled = false;
+          btn.textContent = "Subscribe";
+        })
+        .catch(function() {
+          msg.textContent = "Something went wrong. Please try again.";
+          msg.className = "subscribe-msg error";
+          btn.disabled = false;
+          btn.textContent = "Subscribe";
+        });
       });
     })();
   </script>

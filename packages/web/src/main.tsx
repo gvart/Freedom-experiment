@@ -10,6 +10,7 @@ import { ProjectPage } from "./pages/ProjectPage.js";
 import { NewEntry } from "./pages/NewEntry.js";
 import { EditEntry } from "./pages/EditEntry.js";
 import { ProjectSettings } from "./pages/ProjectSettings.js";
+import { Subscribers } from "./pages/Subscribers.js";
 import { Login } from "./pages/Login.js";
 import { Register } from "./pages/Register.js";
 
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/projects/:slug/new" element={<NewEntry />} />
               <Route path="/projects/:slug/entries/:id" element={<EditEntry />} />
               <Route path="/projects/:slug/settings" element={<ProjectSettings />} />
+              <Route path="/projects/:slug/subscribers" element={<Subscribers />} />
             </Route>
           </Route>
         </Routes>
