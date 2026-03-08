@@ -10,7 +10,7 @@ Changelog tools are either expensive (Beamer $49/mo, AnnounceKit $49/mo, Canny $
 
 - Rich markdown editor with live preview
 - Public changelog pages at `yoursite.com/changelog`
-- Embeddable widget (planned, <10KB) for in-app notifications
+- Embeddable widget (7KB) for in-app changelog notifications
 - RSS feeds for every project
 - API-first — automate from CI/CD
 - Self-hostable with `docker compose up`
@@ -33,7 +33,7 @@ packages/
   core/     Shared types, Zod schemas, markdown-to-HTML converter
   api/      Hono server, Drizzle ORM, REST API, public pages, RSS
   web/      React dashboard (auth, project/entry management, editor)
-  widget/   Embeddable JS widget (in development)
+  widget/   Embeddable JS widget (7KB, Shadow DOM, floating button + panel)
 ```
 
 ## Getting Started
@@ -116,9 +116,28 @@ Data is persisted in a Docker volume (`patchwork-data`).
 - **Categories** — Tag entries as New, Improved, Fixed, or Breaking
 - **API Keys** — Per-project keys for programmatic access
 
+### Embeddable Widget
+
+Add a changelog notification widget to any website with a single script tag:
+
+```html
+<script src="https://your-patchwork.com/widget.js"
+        data-patchwork-project="YOUR_PROJECT_ID"
+        data-patchwork-color="#6366f1"
+        data-patchwork-position="bottom-right">
+</script>
+```
+
+**Features:**
+- 7KB minified — no dependencies
+- Shadow DOM for complete style isolation
+- Floating button with notification badge (shows unseen entries)
+- Slide-out panel with formatted changelog entries
+- Responsive (works on mobile)
+- Customizable color and position (`bottom-right` or `bottom-left`)
+
 ### What's Next
 
-- Embeddable widget (<10KB, Shadow DOM)
 - Email subscriber notifications
 - GitHub Releases import
 - Stripe billing (Pro $9/mo, Team $29/mo)
@@ -151,6 +170,9 @@ GET    /api/projects/:slug/api-keys
 POST   /api/projects/:slug/api-keys
 DELETE /api/projects/:slug/api-keys/:keyId
 
+GET    /api/v1/widget/:projectId  # Widget data (public, open CORS)
+GET    /widget.js                 # Embeddable widget script
+
 GET    /:slug              # Public changelog page
 GET    /:slug/feed.xml     # RSS feed
 ```
@@ -161,7 +183,7 @@ See [architecture docs](.claude/architecture.md) and [decision records](.claude/
 
 ## Development Status
 
-Patchwork is in active development. Phases 1-3 (foundation, core features, auth) and Phase 4 Docker self-hosting are complete. Next up: embeddable widget and deploy to Fly.io.
+Patchwork is in active development. Phases 1-4 (foundation, core features, auth, Docker self-hosting) and the Phase 5 embeddable widget are complete. Next up: email notifications, GitHub Releases sync, and deploy to Fly.io.
 
 ## License
 

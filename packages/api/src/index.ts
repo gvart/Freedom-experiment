@@ -9,6 +9,7 @@ import projects from "./routes/projects.js";
 import entries from "./routes/entries.js";
 import apiKeys from "./routes/api-keys.js";
 import publicPages from "./routes/public.js";
+import widgetApi from "./routes/widget.js";
 
 const app = new Hono();
 
@@ -38,6 +39,33 @@ app.use("/api/projects", requireAuth);
 app.route("/api/projects", projects);
 app.route("/api/projects/:slug/entries", entries);
 app.route("/api/projects/:slug/api-keys", apiKeys);
+
+// Widget data API (public, no auth, open CORS for embeds)
+app.use(
+  "/api/v1/widget/*",
+  cors({ origin: "*" })
+);
+app.route("/api/v1/widget", widgetApi);
+
+// Serve widget.js (the embeddable script)
+app.get("/widget.js", async (c) => {
+  const widgetPath = new URL("../../widget/dist/index.js", import.meta.url).pathname;
+  try {
+    const file = Bun.file(widgetPath);
+    if (await file.exists()) {
+      return new Response(file, {
+        headers: {
+          "Content-Type": "application/javascript; charset=utf-8",
+          "Cache-Control": "public, max-age=3600",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+  } catch {}
+  return c.text("// Widget not built. Run: bun run --filter @patchwork/widget build", 404, {
+    "Content-Type": "application/javascript",
+  });
+});
 
 // In production, serve the built web dashboard as static files
 if (config.staticDir) {

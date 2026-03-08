@@ -2,9 +2,10 @@
   "name": "@patchwork/widget",
   "version": "0.1.0",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "bun build src/index.ts --outdir dist --minify",
+    "build": "bun build src/index.ts --outdir dist --minify --target browser",
+    "dev": "bun build src/index.ts --outdir dist --target browser --watch",
     "test": "bun test"
   }
 }
