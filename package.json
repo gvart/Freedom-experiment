@@ -1,0 +1,13 @@
+{
+  "name": "patchwork",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "db:migrate": "bun run --filter @patchwork/api db:migrate",
+    "db:seed": "bun run --filter @patchwork/api db:seed"
+  }
+}
