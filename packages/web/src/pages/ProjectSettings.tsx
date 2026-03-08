@@ -149,6 +149,30 @@ export function ProjectSettings() {
           </div>
         )}
       </section>
+
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Embeddable Widget</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Add a changelog notification widget to your site with a single script tag.
+          Users see a floating button that opens a panel with your latest updates.
+        </p>
+        <div className="p-4 bg-gray-900 rounded-lg overflow-x-auto">
+          <pre className="text-sm font-mono text-gray-300 whitespace-pre">{`<script src="${window.location.origin}/widget.js"
+        data-patchwork-project="${project.id}"
+        data-patchwork-color="${(project as any).primaryColor || "#6366f1"}"
+        data-patchwork-position="bottom-right">
+</script>`}</pre>
+        </div>
+        <button
+          onClick={() => {
+            const code = `<script src="${window.location.origin}/widget.js" data-patchwork-project="${project.id}" data-patchwork-color="${(project as any).primaryColor || "#6366f1"}" data-patchwork-position="bottom-right"></script>`;
+            navigator.clipboard.writeText(code);
+          }}
+          className="mt-3 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+        >
+          Copy embed code
+        </button>
+      </section>
     </div>
   );
 }

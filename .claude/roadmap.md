@@ -44,12 +44,13 @@
 - [x] Fixed hardcoded localhost URL in dashboard
 - [x] README with project overview, setup, Docker, and API docs
 - [ ] Deploy to Fly.io
-- [ ] Landing page (patchwork.sh)
+- [x] Landing page (server-rendered at /, hero + features + pricing + widget code demo)
 
 ## Phase 5: Widget & Growth Features — IN PROGRESS
 - [x] Embeddable widget (7KB minified, Shadow DOM, floating button + slide-out panel)
 - [x] Widget endpoint: GET /widget.js serves built widget
 - [x] Widget data endpoint: GET /api/v1/widget/:projectId with open CORS
+- [x] Widget embed code in dashboard project settings (copy-to-clipboard)
 - [ ] Email subscriber notifications (via Resend)
 - [ ] GitHub Releases sync (auto-import)
 - [ ] Custom domain support

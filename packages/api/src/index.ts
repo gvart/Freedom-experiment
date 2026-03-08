@@ -10,6 +10,7 @@ import entries from "./routes/entries.js";
 import apiKeys from "./routes/api-keys.js";
 import publicPages from "./routes/public.js";
 import widgetApi from "./routes/widget.js";
+import landing from "./routes/landing.js";
 
 const app = new Hono();
 
@@ -72,6 +73,9 @@ if (config.staticDir) {
   app.use("/assets/*", serveStatic({ root: config.staticDir }));
   app.get("/favicon.ico", serveStatic({ path: `${config.staticDir}/favicon.ico` }));
 }
+
+// Landing page (marketing)
+app.route("", landing);
 
 // Public changelog pages (no auth)
 app.route("/:slug", publicPages);
