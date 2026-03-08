@@ -35,8 +35,8 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Phase 3 (Auth & Polish) — Session 3, 2026-03-08
-**Next up**: Phase 4 (Self-Hosting & Deploy — Docker, Fly.io, landing page)
+**Last completed**: Phase 4 (Self-Hosting) — Session 4, 2026-03-08 (Docker, env config, README)
+**Next up**: Phase 4 remainder (Fly.io deploy, landing page) then Phase 5 (Widget)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far

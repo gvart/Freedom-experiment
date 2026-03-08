@@ -34,12 +34,17 @@
 - [x] Sessions table + migration
 - [x] CORS configured with credentials for cookie auth
 
-## Phase 4: Self-Hosting & Deploy (Session 4)
-- [ ] Dockerfile + docker-compose
-- [ ] Environment variable configuration
+## Phase 4: Self-Hosting & Deploy (Session 4) — IN PROGRESS
+- [x] Environment variable configuration (centralized config.ts module)
+- [x] Dockerfile + docker-compose (multi-stage build, single-command self-hosting)
+- [x] .env.example + .dockerignore
+- [x] Production cookie security (Secure flag in production)
+- [x] Configurable CORS origins
+- [x] Static file serving (API serves built web assets in production)
+- [x] Fixed hardcoded localhost URL in dashboard
+- [x] README with project overview, setup, Docker, and API docs
 - [ ] Deploy to Fly.io
 - [ ] Landing page (patchwork.sh)
-- [ ] Documentation for self-hosters
 
 ## Phase 5: Widget & Growth Features
 - [ ] Embeddable widget (<10KB, Shadow DOM, floating button + slide-out panel)

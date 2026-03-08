@@ -91,3 +91,22 @@ Chose hand-rolled session auth over Better Auth/Lucia for Phase 3:
 - Dual auth: session cookies (dashboard) + Bearer API keys (programmatic)
 - Simple, no external dependencies, easy to understand
 - Can upgrade to Better Auth later if OAuth/social login needed
+
+## ADR-008: Docker Self-Hosting Architecture
+**Date**: 2026-03-08
+**Status**: Accepted
+
+Single-container approach for self-hosting:
+- Multi-stage Dockerfile: deps → build web → slim production image
+- API serves built web assets via Hono's `serveStatic` in production
+- No nginx/reverse proxy needed — Bun handles everything
+- SQLite database stored in Docker volume at `/data/patchwork.db`
+- Migrations run automatically on container start
+- All config via environment variables with sensible defaults
+- `docker compose up` is the entire self-hosting story
+
+Why single container (not API + Web separately):
+- SQLite doesn't support concurrent access from multiple processes well
+- Simpler deployment for self-hosters (one container, one command)
+- Bun is fast enough to serve static assets directly
+- Reduces infrastructure complexity for the $0/mo self-host tier

@@ -2,15 +2,15 @@ import { Hono } from "hono";
 import { eq } from "drizzle-orm";
 import { ulid } from "ulid";
 import { nowUnix } from "@patchwork/core";
+import { config } from "../config.js";
 import { db, schema } from "../db/index.js";
 import { getSessionUser } from "../middleware/auth.js";
 
 const app = new Hono();
 
-const SESSION_MAX_AGE = 30 * 24 * 60 * 60; // 30 days in seconds
-
 function sessionCookie(sessionId: string, maxAge: number): string {
-  return `session=${sessionId}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge}`;
+  const secure = config.isProduction ? "; Secure" : "";
+  return `session=${sessionId}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge}${secure}`;
 }
 
 // Register
@@ -52,11 +52,11 @@ app.post("/register", async (c) => {
   await db.insert(schema.sessions).values({
     id: sessionId,
     userId,
-    expiresAt: now + SESSION_MAX_AGE,
+    expiresAt: now + config.sessionMaxAge,
     createdAt: now,
   });
 
-  c.header("Set-Cookie", sessionCookie(sessionId, SESSION_MAX_AGE));
+  c.header("Set-Cookie", sessionCookie(sessionId, config.sessionMaxAge));
 
   return c.json(
     {
@@ -98,11 +98,11 @@ app.post("/login", async (c) => {
   await db.insert(schema.sessions).values({
     id: sessionId,
     userId: user.id,
-    expiresAt: now + SESSION_MAX_AGE,
+    expiresAt: now + config.sessionMaxAge,
     createdAt: now,
   });
 
-  c.header("Set-Cookie", sessionCookie(sessionId, SESSION_MAX_AGE));
+  c.header("Set-Cookie", sessionCookie(sessionId, config.sessionMaxAge));
 
   return c.json({
     data: {
