@@ -35,8 +35,8 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Phase 5 (Widget) — Session 5, 2026-03-08 (embeddable widget, widget API, widget.js serving)
-**Next up**: Phase 4 remainder (Fly.io deploy, landing page), then Phase 5 remainder (email notifications, GitHub sync, search, analytics)
+**Last completed**: Session 6, 2026-03-08 — fly.toml config, session boundary rules, roadmap cleanup, ownership docs
+**Next up**: Deploy to Fly.io (`fly launch` + `fly deploy`), then Phase 5 features (email notifications, GitHub sync, search, analytics)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far
