@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { Project, Entry } from "@patchwork/core";
 import { api } from "../lib/api.js";
@@ -15,6 +15,18 @@ export function ProjectPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const fetchEntries = useCallback(
+    (q?: string) => {
+      if (!slug) return;
+      api.entries.list(slug, 1, q || undefined).then((res) => {
+        setEntries(res.data);
+      });
+    },
+    [slug]
+  );
 
   useEffect(() => {
     if (!slug) return;
@@ -26,6 +38,12 @@ export function ProjectPage() {
       }
     );
   }, [slug]);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchEntries(value), 300);
+  };
 
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (!project) return <p className="text-red-500">Project not found</p>;
@@ -61,11 +79,25 @@ export function ProjectPage() {
         </div>
       </div>
 
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search entries..."
+          value={search}
+          onChange={(e) => handleSearch(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
       {entries.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <p className="text-gray-500 mb-2">No changelog entries yet</p>
+          <p className="text-gray-500 mb-2">
+            {search ? "No entries match your search" : "No changelog entries yet"}
+          </p>
           <p className="text-sm text-gray-400">
-            Create your first entry to start documenting changes.
+            {search
+              ? "Try a different search term."
+              : "Create your first entry to start documenting changes."}
           </p>
         </div>
       ) : (
@@ -81,6 +113,12 @@ export function ProjectPage() {
                   {entry.title}
                 </h2>
                 <div className="flex items-center gap-2 ml-4">
+                  {(entry.viewCount ?? 0) > 0 && (
+                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      {entry.viewCount}
+                    </span>
+                  )}
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                       entry.publishedAt

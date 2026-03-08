@@ -55,8 +55,8 @@
 - [x] Widget embed code in dashboard project settings (copy-to-clipboard)
 - [ ] Email subscriber notifications (via Resend)
 - [ ] GitHub Releases sync (auto-import)
-- [ ] Search across entries
-- [ ] Analytics (views per entry)
+- [x] Search across entries (debounced ?q= filter on title/content, dashboard search bar)
+- [x] Analytics (entry_views table, beacon tracking on public pages, view counts in dashboard)
 
 ## Phase 6: Monetize & Scale
 - [ ] Turso for production database (replace local SQLite in hosted mode)

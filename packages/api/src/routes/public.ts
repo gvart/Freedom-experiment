@@ -25,7 +25,8 @@ function renderChangelogPage(
   entries: Array<{
     entry: typeof schema.entries.$inferSelect;
     categories: Category[];
-  }>
+  }>,
+  baseUrl: string
 ): string {
   const primaryColor = project.primaryColor || "#6366f1";
 
@@ -127,6 +128,15 @@ function renderChangelogPage(
   <div class="footer">
     Powered by <a href="https://patchwork.sh">Patchwork</a>
   </div>
+  <script>
+    (function(){
+      var ids = ${JSON.stringify(entries.map((e) => e.entry.id))};
+      var base = "${escapeHtml(baseUrl)}";
+      ids.forEach(function(id){
+        try { navigator.sendBeacon(base + "/api/v1/widget/track/" + id); } catch(e) {}
+      });
+    })();
+  </script>
 </body>
 </html>`;
 }
@@ -178,7 +188,9 @@ app.get("/", async (c) => {
     })
   );
 
-  const html = renderChangelogPage(project, entries);
+  const url = new URL(c.req.url);
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const html = renderChangelogPage(project, entries, baseUrl);
   return c.html(html);
 });
 

@@ -20,6 +20,7 @@ export type Entry = {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  viewCount?: number;
 };
 
 export type Subscriber = {
