@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import type { Category, Entry } from "@patchwork/core";
 import { api } from "../lib/api.js";
 import { MarkdownEditor } from "../components/MarkdownEditor.js";
+import { useToast } from "../components/Toast.js";
 
 const CATEGORIES: { value: Category; label: string; color: string }[] = [
   { value: "new", label: "New", color: "bg-green-100 text-green-800 border-green-300" },
@@ -14,6 +15,7 @@ const CATEGORIES: { value: Category; label: string; color: string }[] = [
 export function EditEntry() {
   const { slug, id } = useParams<{ slug: string; id: string }>();
   const navigate = useNavigate();
+  const toast = useToast();
   const [entry, setEntry] = useState<Entry | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -51,6 +53,7 @@ export function EditEntry() {
 
     try {
       await api.entries.update(slug, id, { title, content, categories });
+      toast("Changes saved");
       navigate(`/projects/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
@@ -68,6 +71,7 @@ export function EditEntry() {
         categories,
         publishedAt: new Date().toISOString(),
       });
+      toast("Entry published");
       navigate(`/projects/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to publish");
@@ -80,6 +84,7 @@ export function EditEntry() {
     setSubmitting(true);
     try {
       await api.entries.unpublish(slug, id);
+      toast("Entry unpublished");
       navigate(`/projects/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to unpublish");

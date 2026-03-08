@@ -78,3 +78,16 @@ These were researched and may be adopted in future phases:
 - **Better Auth**: For authentication (email/password + GitHub OAuth)
 - **Tiptap**: For the rich block editor (ProseMirror-based)
 - **Shadcn/ui**: For dashboard UI components (copy-paste, no lock-in)
+
+## ADR-007: Simple Session Auth (No Library)
+**Date**: 2026-03-08
+**Status**: Accepted
+
+Chose hand-rolled session auth over Better Auth/Lucia for Phase 3:
+- Bun has built-in `Bun.password.hash()` and `Bun.password.verify()` (bcrypt)
+- Sessions stored in `sessions` table with ULID tokens
+- httpOnly cookies with SameSite=Lax for CSRF protection
+- API keys use `pk_` prefix, hashed with bcrypt, shown only once on creation
+- Dual auth: session cookies (dashboard) + Bearer API keys (programmatic)
+- Simple, no external dependencies, easy to understand
+- Can upgrade to Better Auth later if OAuth/social login needed

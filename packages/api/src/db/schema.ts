@@ -58,3 +58,12 @@ export const users = sqliteTable("users", {
   passwordHash: text("password_hash").notNull(),
   createdAt: integer("created_at").notNull(),
 });
+
+export const sessions = sqliteTable("sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at").notNull(),
+  createdAt: integer("created_at").notNull(),
+});

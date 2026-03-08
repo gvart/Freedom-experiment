@@ -5,6 +5,7 @@ const BASE = "/api";
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...options?.headers,
@@ -20,7 +21,26 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return json;
 }
 
+type AuthUser = { id: string; email: string };
+
 export const api = {
+  auth: {
+    register: (data: { email: string; password: string }) =>
+      request<ApiResponse<AuthUser>>("/auth/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    login: (data: { email: string; password: string }) =>
+      request<ApiResponse<AuthUser>>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    logout: () =>
+      request<ApiResponse<{ ok: boolean }>>("/auth/logout", {
+        method: "POST",
+      }),
+    me: () => request<ApiResponse<AuthUser>>("/auth/me"),
+  },
   projects: {
     list: () => request<ApiResponse<Project[]>>("/projects"),
     get: (slug: string) => request<ApiResponse<Project>>(`/projects/${slug}`),
@@ -63,6 +83,19 @@ export const api = {
       }),
     delete: (slug: string, id: string) =>
       request<ApiResponse<{ deleted: boolean }>>(`/projects/${slug}/entries/${id}`, {
+        method: "DELETE",
+      }),
+  },
+  apiKeys: {
+    list: (slug: string) =>
+      request<ApiResponse<Array<{ id: string; projectId: string; name: string; lastUsedAt: string | null; createdAt: string }>>>(`/projects/${slug}/api-keys`),
+    create: (slug: string, data: { name: string }) =>
+      request<ApiResponse<{ id: string; projectId: string; name: string; key: string; createdAt: string }>>(`/projects/${slug}/api-keys`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    delete: (slug: string, keyId: string) =>
+      request<ApiResponse<{ deleted: boolean }>>(`/projects/${slug}/api-keys/${keyId}`, {
         method: "DELETE",
       }),
   },
