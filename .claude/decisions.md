@@ -142,3 +142,25 @@ Design:
 - Deduplication by entry title match
 - All imported entries tagged as "new" category
 - Manual "Sync Now" button in settings (no webhooks for MVP)
+
+## ADR-011: CI/CD with GitHub Actions (Session 9)
+
+Decision: Two-workflow CI/CD pipeline for automated quality checks and deployment.
+
+**CI workflow** (`.github/workflows/ci.yml`):
+- Triggers on PRs to `main` and pushes to `main`
+- Three parallel jobs: lint, test, build
+- Uses `oven-sh/setup-bun@v2` with Bun 1.3
+- Ensures nothing merges without passing all checks
+
+**Deploy workflow** (`.github/workflows/deploy.yml`):
+- Triggers on push to `main` only
+- Runs CI checks first (reuses ci.yml), then deploys
+- Uses `superfly/flyctl-actions` for Fly.io deployment
+- Concurrency group ensures only one deploy runs at a time
+- Requires `FLY_API_TOKEN` secret in GitHub repo settings
+
+**Setup required by human partner**:
+1. Run `fly launch --copy-config --no-deploy` to create the app
+2. Run `fly tokens create deploy` to get a deploy token
+3. Add `FLY_API_TOKEN` secret in GitHub repo Settings → Secrets → Actions
