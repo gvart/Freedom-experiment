@@ -176,8 +176,10 @@ app.put("/:id", async (c) => {
   const updates: Record<string, unknown> = { updatedAt: nowUnix() };
   if (parsed.data.title !== undefined) updates.title = parsed.data.title;
   if (parsed.data.content !== undefined) updates.content = parsed.data.content;
-  if (parsed.data.publishedAt !== undefined) {
-    updates.publishedAt = toUnixSeconds(parsed.data.publishedAt);
+  if ("publishedAt" in (body as Record<string, unknown>)) {
+    updates.publishedAt = parsed.data.publishedAt
+      ? toUnixSeconds(parsed.data.publishedAt)
+      : null;
   }
 
   await db.update(schema.entries).set(updates).where(eq(schema.entries.id, id));

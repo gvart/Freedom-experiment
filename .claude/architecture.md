@@ -98,6 +98,14 @@ Patchwork is a monorepo with 4 packages:
 
 ```
 GET    /api/health
+
+# Auth (public, no auth required)
+POST   /api/auth/register                (email + password → session cookie)
+POST   /api/auth/login                   (email + password → session cookie)
+POST   /api/auth/logout                  (clear session)
+GET    /api/auth/me                      (get current user from session)
+
+# Dashboard API (requires session cookie or API key)
 POST   /api/projects
 GET    /api/projects
 GET    /api/projects/:slug
@@ -110,10 +118,16 @@ GET    /api/projects/:slug/entries/:id
 PUT    /api/projects/:slug/entries/:id
 DELETE /api/projects/:slug/entries/:id
 
-GET    /api/projects/:slug/feed.xml     (RSS)
+GET    /api/projects/:slug/api-keys
+POST   /api/projects/:slug/api-keys
+DELETE /api/projects/:slug/api-keys/:keyId
 
 POST   /api/projects/:slug/subscribers
 DELETE /api/projects/:slug/subscribers/:token
+
+# Public pages (no auth)
+GET    /:slug                            (Public changelog page - HTML)
+GET    /:slug/feed.xml                   (RSS feed - XML)
 ```
 
 ## Data Flow

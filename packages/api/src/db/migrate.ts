@@ -62,6 +62,16 @@ sqlite.exec(`
   CREATE INDEX IF NOT EXISTS idx_entries_published_at ON entries(published_at);
   CREATE INDEX IF NOT EXISTS idx_entry_categories_entry_id ON entry_categories(entry_id);
   CREATE INDEX IF NOT EXISTS idx_subscribers_project_id ON subscribers(project_id);
+
+  CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    expires_at INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+  CREATE INDEX IF NOT EXISTS idx_api_keys_project_id ON api_keys(project_id);
 `);
 
 console.log("Migrations complete.");

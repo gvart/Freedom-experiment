@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* Markdown preview styles */
+.prose-preview h1 { font-size: 1.5em; font-weight: 700; margin: 1em 0 0.5em; }
+.prose-preview h2 { font-size: 1.25em; font-weight: 600; margin: 1em 0 0.5em; }
+.prose-preview h3 { font-size: 1.1em; font-weight: 600; margin: 0.75em 0 0.5em; }
+.prose-preview p { margin: 0 0 0.75em; line-height: 1.6; }
+.prose-preview ul, .prose-preview ol { margin: 0 0 0.75em; padding-left: 1.5em; }
+.prose-preview li { margin-bottom: 0.25em; }
+.prose-preview pre { background: #1f2937; color: #f9fafb; padding: 1em; border-radius: 0.5em; overflow-x: auto; margin: 0.75em 0; font-size: 0.875em; }
+.prose-preview code { font-family: ui-monospace, monospace; font-size: 0.9em; background: #f3f4f6; padding: 0.125em 0.375em; border-radius: 0.25em; }
+.prose-preview pre code { background: none; padding: 0; }
+.prose-preview blockquote { border-left: 3px solid #6366f1; padding-left: 1em; color: #6b7280; margin: 0.75em 0; }
+.prose-preview a { color: #6366f1; text-decoration: underline; }
+.prose-preview hr { border: none; border-top: 1px solid #e5e7eb; margin: 1.5em 0; }
+.prose-preview img { max-width: 100%; border-radius: 0.5em; margin: 0.75em 0; }
+
+/* Toast animation */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.2s ease-out; }
