@@ -48,13 +48,13 @@
 - [x] fly.toml deployment config (auto-stop, shared-cpu-1x, 256MB, volume mount)
 - [~] Deploy to Fly.io (config ready, needs `fly launch` + `fly deploy`)
 
-## Phase 5: Widget & Growth Features — IN PROGRESS
+## Phase 5: Widget & Growth Features — COMPLETE
 - [x] Embeddable widget (7KB minified, Shadow DOM, floating button + slide-out panel)
 - [x] Widget endpoint: GET /widget.js serves built widget
 - [x] Widget data endpoint: GET /api/v1/widget/:projectId with open CORS
 - [x] Widget embed code in dashboard project settings (copy-to-clipboard)
-- [ ] Email subscriber notifications (via Resend)
-- [ ] GitHub Releases sync (auto-import)
+- [x] Email subscriber notifications (via Resend: double opt-in, publish trigger, inline HTML emails)
+- [x] GitHub Releases sync (auto-import as drafts, owner/repo config in settings, sync button)
 - [x] Search across entries (debounced ?q= filter on title/content, dashboard search bar)
 - [x] Analytics (entry_views table, beacon tracking on public pages, view counts in dashboard)
 

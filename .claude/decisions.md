@@ -110,3 +110,35 @@ Why single container (not API + Web separately):
 - Simpler deployment for self-hosters (one container, one command)
 - Bun is fast enough to serve static assets directly
 - Reduces infrastructure complexity for the $0/mo self-host tier
+
+## ADR-009: Email via Resend (Session 8)
+
+Decision: Use Resend for transactional emails with graceful no-op when API key is absent.
+
+Why Resend:
+- Generous free tier (100 emails/day, more than enough for early growth)
+- Simple API, great DX, modern service
+- No complex SMTP setup needed
+- Inline HTML templates (no template engine) — keeps it simple
+
+Design decisions:
+- Double opt-in: subscribers must confirm email before receiving notifications
+- Fire-and-forget: notifications sent async after publish response returns
+- Dev mode: when RESEND_API_KEY is empty, emails are logged to console
+- Subscribe form embedded in public changelog page (no separate page needed)
+
+## ADR-010: GitHub Releases Sync (Session 8)
+
+Decision: Allow connecting a GitHub repo to a project and importing releases as draft entries.
+
+Why drafts (not auto-publish):
+- Users should review imported content before publishing
+- Release notes may need editing for changelog format
+- Prevents accidental notification spam to subscribers
+
+Design:
+- GitHub repo stored as `owner/repo` string on projects table
+- Uses GitHub REST API (unauthenticated: 60 req/hr, with token: 5000/hr)
+- Deduplication by entry title match
+- All imported entries tagged as "new" category
+- Manual "Sync Now" button in settings (no webhooks for MVP)

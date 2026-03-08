@@ -16,6 +16,11 @@ export const createProjectSchema = z.object({
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/)
     .optional(),
+  githubRepo: z
+    .string()
+    .regex(/^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/, "Must be in owner/repo format")
+    .optional()
+    .nullable(),
 });
 
 export const updateProjectSchema = createProjectSchema.partial();

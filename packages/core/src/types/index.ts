@@ -7,6 +7,7 @@ export type Project = {
   description: string | null;
   logoUrl: string | null;
   primaryColor: string;
+  githubRepo: string | null;
   createdAt: string;
   updatedAt: string;
 };

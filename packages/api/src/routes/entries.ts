@@ -11,6 +11,7 @@ import {
 } from "@patchwork/core";
 import type { Category } from "@patchwork/core";
 import { db, schema } from "../db/index.js";
+import { sendNewEntryNotification } from "../services/email.js";
 
 const app = new Hono();
 
@@ -218,6 +219,39 @@ app.put("/:id", async (c) => {
     .where(eq(schema.entries.id, id))
     .get();
   const categories = await getCategoriesForEntry(id);
+
+  // Notify subscribers when an entry is first published
+  const isNewPublish = !existing.publishedAt && updated?.publishedAt;
+  if (isNewPublish) {
+    // Fire and forget — don't block the response
+    (async () => {
+      try {
+        const confirmedSubs = await db
+          .select()
+          .from(schema.subscribers)
+          .where(
+            and(
+              eq(schema.subscribers.projectId, project.id),
+              eq(schema.subscribers.confirmed, 1)
+            )
+          )
+          .all();
+
+        if (confirmedSubs.length > 0) {
+          await sendNewEntryNotification(
+            confirmedSubs.map((s) => ({ email: s.email, token: s.token })),
+            { name: project.name, slug: project.slug },
+            { title: updated!.title, content: updated!.content },
+            categories
+          );
+          console.log(`[notify] Sent publish notification to ${confirmedSubs.length} subscribers`);
+        }
+      } catch (err) {
+        console.error("[notify] Failed to send publish notifications:", err);
+      }
+    })();
+  }
+
   return c.json({ data: serializeEntry(updated!, categories) });
 });
 

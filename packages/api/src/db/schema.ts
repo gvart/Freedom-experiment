@@ -7,6 +7,7 @@ export const projects = sqliteTable("projects", {
   description: text("description"),
   logoUrl: text("logo_url"),
   primaryColor: text("primary_color").notNull().default("#6366f1"),
+  githubRepo: text("github_repo"),
   createdAt: integer("created_at").notNull(),
   updatedAt: integer("updated_at").notNull(),
 });

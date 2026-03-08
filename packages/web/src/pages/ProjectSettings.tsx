@@ -19,6 +19,9 @@ export function ProjectSettings() {
   const [revealedKey, setRevealedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [githubRepo, setGithubRepo] = useState("");
+  const [syncStatus, setSyncStatus] = useState("");
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -26,6 +29,7 @@ export function ProjectSettings() {
       ([projRes, keysRes]) => {
         setProject(projRes.data);
         setKeys(keysRes.data);
+        setGithubRepo(projRes.data.githubRepo || "");
         setLoading(false);
       }
     );
@@ -147,6 +151,62 @@ export function ProjectSettings() {
               </div>
             ))}
           </div>
+        )}
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">GitHub Releases Sync</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Connect a GitHub repository to import releases as changelog entries.
+        </p>
+        <div className="flex gap-2 mb-3">
+          <input
+            type="text"
+            value={githubRepo}
+            onChange={(e) => setGithubRepo(e.target.value)}
+            placeholder="owner/repo (e.g. facebook/react)"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+          />
+          <button
+            onClick={async () => {
+              if (!slug) return;
+              try {
+                await api.projects.update(slug, { githubRepo: githubRepo || null });
+                setSyncStatus("Repository saved.");
+              } catch (err) {
+                setSyncStatus(err instanceof Error ? err.message : "Failed to save");
+              }
+            }}
+            className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 text-sm font-medium"
+          >
+            Save
+          </button>
+        </div>
+        {githubRepo && (
+          <button
+            disabled={syncing}
+            onClick={async () => {
+              if (!slug) return;
+              setSyncing(true);
+              setSyncStatus("Syncing...");
+              try {
+                const res = await api.projects.syncGithub(slug);
+                setSyncStatus(
+                  `Imported ${res.data.imported} release${res.data.imported !== 1 ? "s" : ""} (${res.data.skipped} skipped, ${res.data.total} total).`
+                );
+              } catch (err) {
+                setSyncStatus(err instanceof Error ? err.message : "Sync failed");
+              } finally {
+                setSyncing(false);
+              }
+            }}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium disabled:opacity-50"
+          >
+            {syncing ? "Syncing..." : "Sync Now"}
+          </button>
+        )}
+        {syncStatus && (
+          <p className="mt-2 text-sm text-gray-600">{syncStatus}</p>
         )}
       </section>
 

@@ -57,6 +57,12 @@ export function ProjectPage() {
         </div>
         <div className="flex items-center gap-3">
           <Link
+            to={`/projects/${slug}/subscribers`}
+            className="px-3 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium"
+          >
+            Subscribers
+          </Link>
+          <Link
             to={`/projects/${slug}/settings`}
             className="px-3 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium"
           >

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { eq } from "drizzle-orm";
+import { eq, and, like } from "drizzle-orm";
 import { ulid } from "ulid";
 import {
   createProjectSchema,
@@ -8,6 +8,7 @@ import {
   toISOString,
 } from "@patchwork/core";
 import { db, schema } from "../db/index.js";
+import { fetchReleases, parseGithubRepo } from "../services/github.js";
 
 const app = new Hono();
 
@@ -19,6 +20,7 @@ function serializeProject(row: typeof schema.projects.$inferSelect) {
     description: row.description,
     logoUrl: row.logoUrl,
     primaryColor: row.primaryColor,
+    githubRepo: row.githubRepo,
     createdAt: toISOString(row.createdAt),
     updatedAt: toISOString(row.updatedAt),
   };
@@ -59,6 +61,7 @@ app.post("/", async (c) => {
     description: parsed.data.description ?? null,
     logoUrl: null,
     primaryColor: parsed.data.primaryColor ?? "#6366f1",
+    githubRepo: parsed.data.githubRepo ?? null,
     createdAt: now,
     updatedAt: now,
   };
@@ -109,6 +112,71 @@ app.put("/:slug", async (c) => {
     .get();
 
   return c.json({ data: serializeProject(updated!) });
+});
+
+// Sync GitHub releases
+app.post("/:slug/sync-github", async (c) => {
+  const { slug } = c.req.param();
+  const project = await db
+    .select()
+    .from(schema.projects)
+    .where(eq(schema.projects.slug, slug))
+    .get();
+
+  if (!project) return c.json({ error: "Project not found" }, 404);
+  if (!project.githubRepo) {
+    return c.json({ error: "No GitHub repository configured for this project" }, 400);
+  }
+
+  const parsed = parseGithubRepo(project.githubRepo);
+  if (!parsed) {
+    return c.json({ error: "Invalid GitHub repository format" }, 400);
+  }
+
+  const releases = await fetchReleases(parsed.owner, parsed.repo);
+  let imported = 0;
+
+  for (const release of releases) {
+    // Skip if an entry with this title already exists
+    const existing = await db
+      .select()
+      .from(schema.entries)
+      .where(
+        and(
+          eq(schema.entries.projectId, project.id),
+          eq(schema.entries.title, release.title)
+        )
+      )
+      .get();
+
+    if (existing) continue;
+
+    const now = nowUnix();
+    const entryId = ulid();
+    const content = release.body || `Release ${release.tag}`;
+
+    await db.insert(schema.entries).values({
+      id: entryId,
+      projectId: project.id,
+      title: release.title,
+      content,
+      publishedAt: null, // Draft — user reviews before publishing
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // Auto-categorize as "new"
+    await db.insert(schema.entryCategories).values({
+      entryId,
+      category: "new",
+    });
+
+    imported++;
+  }
+
+  return c.json({
+    data: { imported, total: releases.length, skipped: releases.length - imported },
+  });
 });
 
 // Delete project
