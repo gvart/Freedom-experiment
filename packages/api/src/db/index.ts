@@ -1,8 +1,9 @@
 import { Database } from "bun:sqlite";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import * as schema from "./schema.js";
+import { config } from "../config.js";
 
-const DB_PATH = process.env.DATABASE_URL ?? "patchwork.db";
+const DB_PATH = config.databaseUrl;
 
 const sqlite = new Database(DB_PATH);
 sqlite.exec("PRAGMA journal_mode = WAL;");

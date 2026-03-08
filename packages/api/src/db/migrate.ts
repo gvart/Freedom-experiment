@@ -1,6 +1,7 @@
 import { Database } from "bun:sqlite";
+import { config } from "../config.js";
 
-const DB_PATH = process.env.DATABASE_URL ?? "patchwork.db";
+const DB_PATH = config.databaseUrl;
 const sqlite = new Database(DB_PATH);
 
 sqlite.exec("PRAGMA journal_mode = WAL;");

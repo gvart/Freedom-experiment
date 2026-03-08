@@ -1,0 +1,18 @@
+services:
+  patchwork:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - patchwork-data:/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=/data/patchwork.db
+      - STATIC_DIR=packages/web/dist
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    restart: unless-stopped
+
+volumes:
+  patchwork-data:

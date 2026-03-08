@@ -13,7 +13,7 @@ Changelog tools are either expensive (Beamer $49/mo, AnnounceKit $49/mo, Canny $
 - Embeddable widget (planned, <10KB) for in-app notifications
 - RSS feeds for every project
 - API-first — automate from CI/CD
-- Self-hostable with Docker (coming soon)
+- Self-hostable with `docker compose up`
 - Pro plan at $9/mo undercuts every competitor
 
 ## Tech Stack
@@ -74,6 +74,37 @@ bun run test         # Run all tests
 bun run lint         # Lint all packages
 ```
 
+## Self-Hosting with Docker
+
+The fastest way to run Patchwork:
+
+```bash
+# Clone and start
+git clone https://github.com/gvart/Freedom-experiment.git
+cd Freedom-experiment
+docker compose up -d
+```
+
+Patchwork is now running at `http://localhost:3000`. Register an account, create a project, and start writing changelogs.
+
+### Configuration
+
+Copy `.env.example` to `.env` to customize:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Default | Description |
+|---|---|---|
+| `PORT` | `3000` | Server port |
+| `DATABASE_URL` | `/data/patchwork.db` | SQLite database path |
+| `BASE_URL` | `http://localhost:3000` | Public URL (for RSS feeds, links) |
+| `CORS_ORIGINS` | `*` | Allowed CORS origins (comma-separated) |
+| `SESSION_MAX_AGE` | `2592000` | Session duration in seconds (30 days) |
+
+Data is persisted in a Docker volume (`patchwork-data`).
+
 ## Features
 
 ### What's Built
@@ -87,7 +118,6 @@ bun run lint         # Lint all packages
 
 ### What's Next
 
-- Docker + docker-compose for self-hosting
 - Embeddable widget (<10KB, Shadow DOM)
 - Email subscriber notifications
 - GitHub Releases import
@@ -131,7 +161,7 @@ See [architecture docs](.claude/architecture.md) and [decision records](.claude/
 
 ## Development Status
 
-Patchwork is in active development. Phases 1-3 (foundation, core features, auth) are complete. Phase 4 (self-hosting, Docker, deploy) is next.
+Patchwork is in active development. Phases 1-3 (foundation, core features, auth) and Phase 4 Docker self-hosting are complete. Next up: embeddable widget and deploy to Fly.io.
 
 ## License
 
