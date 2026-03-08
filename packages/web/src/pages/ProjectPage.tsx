@@ -37,12 +37,22 @@ export function ProjectPage() {
           <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
           <p className="text-sm text-gray-500">/{project.slug}</p>
         </div>
-        <Link
-          to={`/projects/${slug}/new`}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
-        >
-          New Entry
-        </Link>
+        <div className="flex items-center gap-3">
+          <a
+            href={`http://localhost:3001/${project.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium"
+          >
+            View Public Page
+          </a>
+          <Link
+            to={`/projects/${slug}/new`}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
+          >
+            New Entry
+          </Link>
+        </div>
       </div>
 
       {entries.length === 0 ? (
@@ -55,19 +65,31 @@ export function ProjectPage() {
       ) : (
         <div className="space-y-4">
           {entries.map((entry) => (
-            <article
+            <Link
               key={entry.id}
-              className="p-5 bg-white rounded-lg border border-gray-200"
+              to={`/projects/${slug}/entries/${entry.id}`}
+              className="block p-5 bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition-all"
             >
               <div className="flex items-start justify-between mb-2">
                 <h2 className="text-lg font-semibold text-gray-900">
                   {entry.title}
                 </h2>
-                <time className="text-xs text-gray-400 whitespace-nowrap ml-4">
-                  {entry.publishedAt
-                    ? new Date(entry.publishedAt).toLocaleDateString()
-                    : "Draft"}
-                </time>
+                <div className="flex items-center gap-2 ml-4">
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                      entry.publishedAt
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {entry.publishedAt ? "Published" : "Draft"}
+                  </span>
+                  <time className="text-xs text-gray-400 whitespace-nowrap">
+                    {entry.publishedAt
+                      ? new Date(entry.publishedAt).toLocaleDateString()
+                      : new Date(entry.createdAt).toLocaleDateString()}
+                  </time>
+                </div>
               </div>
               <div className="flex gap-2 mb-3">
                 {entry.categories.map((cat) => (
@@ -79,10 +101,10 @@ export function ProjectPage() {
                   </span>
                 ))}
               </div>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">
+              <p className="text-sm text-gray-600 line-clamp-2">
                 {entry.content}
               </p>
-            </article>
+            </Link>
           ))}
         </div>
       )}

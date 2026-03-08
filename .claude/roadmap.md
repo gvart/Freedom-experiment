@@ -13,12 +13,15 @@
 - [x] CRUD endpoints (projects + entries)
 - [x] Web dashboard scaffold (Vite + React + Tailwind)
 
-## Phase 2: Core Features (Session 2)
-- [ ] Public changelog page (beautiful, responsive)
-- [ ] Markdown editor in dashboard
-- [ ] Category management (New/Improved/Fixed/Breaking)
-- [ ] RSS feed generation
-- [ ] Entry publishing workflow (draft → published)
+## Phase 2: Core Features (Session 2) — COMPLETE
+- [x] Public changelog page (beautiful, responsive HTML served at /:slug)
+- [x] Markdown editor with live preview in dashboard
+- [x] Category management (New/Improved/Fixed/Breaking) — badges on entries
+- [x] RSS feed generation (/:slug/feed.xml with Atom self-link)
+- [x] Entry publishing workflow (draft → published → unpublish)
+- [x] Entry edit page in dashboard
+- [x] Lightweight markdown-to-HTML converter (core package, zero deps)
+- [x] Fixed Turborepo integration (added as devDependency + packageManager field)
 
 ## Phase 3: Auth & Polish (Session 3)
 - [ ] Dashboard authentication (email + password)

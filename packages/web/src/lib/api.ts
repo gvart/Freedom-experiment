@@ -47,6 +47,20 @@ export const api = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (
+      slug: string,
+      id: string,
+      data: { title?: string; content?: string; categories?: string[]; publishedAt?: string }
+    ) =>
+      request<ApiResponse<Entry>>(`/projects/${slug}/entries/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    unpublish: (slug: string, id: string) =>
+      request<ApiResponse<Entry>>(`/projects/${slug}/entries/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ publishedAt: null }),
+      }),
     delete: (slug: string, id: string) =>
       request<ApiResponse<{ deleted: boolean }>>(`/projects/${slug}/entries/${id}`, {
         method: "DELETE",

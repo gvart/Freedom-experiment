@@ -110,10 +110,11 @@ GET    /api/projects/:slug/entries/:id
 PUT    /api/projects/:slug/entries/:id
 DELETE /api/projects/:slug/entries/:id
 
-GET    /api/projects/:slug/feed.xml     (RSS)
-
 POST   /api/projects/:slug/subscribers
 DELETE /api/projects/:slug/subscribers/:token
+
+GET    /:slug                            (Public changelog page - HTML)
+GET    /:slug/feed.xml                   (RSS feed - XML)
 ```
 
 ## Data Flow

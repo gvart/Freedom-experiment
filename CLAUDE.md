@@ -35,16 +35,16 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Phase 1 (Foundation) — Session 1, 2026-03-08
-**Next up**: Phase 2 (Public changelog page, markdown editor, RSS, publishing workflow)
+**Last completed**: Phase 2 (Core Features) — Session 2, 2026-03-08
+**Next up**: Phase 3 (Auth & Polish — dashboard auth, API keys, error handling, loading states)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far
 
 - Monorepo scaffold (Bun workspaces + Turborepo + Biome)
-- `packages/core`: Shared Zod schemas + TypeScript types
-- `packages/api`: Hono server with Drizzle ORM, full CRUD endpoints for projects + entries
-- `packages/web`: React dashboard scaffold (Vite + Tailwind v4), project/entry list pages
+- `packages/core`: Shared Zod schemas + TypeScript types + markdown-to-HTML converter
+- `packages/api`: Hono server with Drizzle ORM, full CRUD endpoints, public changelog pages, RSS feeds
+- `packages/web`: React dashboard with project/entry management, markdown editor with preview, publish/unpublish workflow
 - Database: SQLite with projects, entries, entry_categories, subscribers, api_keys, users tables
 
 ## Project Vision

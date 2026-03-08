@@ -27,7 +27,12 @@ export const createEntrySchema = z.object({
   publishedAt: z.string().datetime().optional(),
 });
 
-export const updateEntrySchema = createEntrySchema.partial();
+export const updateEntrySchema = z.object({
+  title: z.string().min(1).max(200).optional(),
+  content: z.string().min(1).optional(),
+  categories: z.array(z.enum(CATEGORIES)).min(1).optional(),
+  publishedAt: z.string().datetime().nullable().optional(),
+});
 
 export const subscribeSchema = z.object({
   email: z.string().email(),
