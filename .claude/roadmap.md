@@ -33,22 +33,37 @@
 - [ ] Landing page (patchwork.sh)
 - [ ] Documentation for self-hosters
 
-## Phase 5: Growth Features
+## Phase 5: Widget & Growth Features
+- [ ] Embeddable widget (<10KB, Shadow DOM, floating button + slide-out panel)
+- [ ] Widget endpoint: GET /widget.js serves built widget
+- [ ] Widget data endpoint: GET /api/v1/widget/:projectId
 - [ ] Email subscriber notifications (via Resend)
-- [ ] Embeddable widget (script tag)
 - [ ] GitHub Releases sync (auto-import)
 - [ ] Custom domain support
 - [ ] Search across entries
 - [ ] Analytics (views per entry)
-- [ ] Team/multi-user support
+- [ ] Team/multi-user (organizations, roles: owner/admin/editor)
 
-## Phase 6: Monetization
-- [ ] Hosted multi-tenant setup
-- [ ] Stripe integration for billing
-- [ ] Plan limits enforcement
-- [ ] Customer onboarding flow
+## Phase 6: Deploy & Monetize
+- [ ] Dockerfile + docker-compose for self-hosting
+- [ ] Deploy to Fly.io (auto-stop machine, $2-5/mo)
+- [ ] Turso for production database
+- [ ] Landing page at / (marketing for Patchwork itself)
+- [ ] Stripe integration: Pro $9/mo, Team $29/mo
+- [ ] Plan enforcement middleware (org.plan field)
+- [ ] "Powered by Patchwork" footer on all public pages (removable on paid plans)
+
+## Revenue Targets
+- Month 1-3: Free users only, building product and audience
+- Month 4-6: Launch Pro, target 20 paying users = $180/mo
+- Month 6-12: Target 100 paying users = $900/mo
+- Year 2: Target 500 users = $5,000-10,000/mo
 
 ## Future Ideas (Backlog)
+- tRPC for dashboard API (type-safe internal communication)
+- Tiptap block editor upgrade (replace markdown textarea)
+- Shadcn/ui components for dashboard
+- Better Auth (email/password + GitHub OAuth)
 - Slack/Discord integration (post changelogs to channels)
 - AI-powered changelog generation from git commits
 - Changelog templates

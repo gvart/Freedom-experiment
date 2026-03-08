@@ -52,3 +52,29 @@ ULIDs over UUIDs or auto-increment:
 - URL-safe
 - No sequential ID enumeration
 - 26 chars vs UUID's 36
+
+## ADR-006: Competitive Positioning
+**Date**: 2026-03-08
+**Status**: Accepted
+
+### Research Findings
+- **Openchangelog** (github.com/JonasHiltl/openchangelog, ~294 stars): Only real OSS competitor. Go-based, just renders existing markdown files. No editor, no widget, no SaaS platform. Fundamentally a different product.
+- **Beamer**: $49/mo, MAU-priced (punishes growth). Main feature: embeddable widget.
+- **AnnounceKit**: $49/mo, similar to Beamer.
+- **Canny**: $400/mo, overkill for changelogs (it's a feedback tool).
+- **Changelogy**: $10/mo, feature-thin, not open source.
+
+### Patchwork's Differentiators
+1. **Rich block editor** (not just markdown textarea) — Tiptap/ProseMirror based
+2. **Embeddable widget** (<10KB, Shadow DOM) — the feature that justifies paid plans
+3. **Public pages with viral "Powered by Patchwork"** footer
+4. **API-first** for CI/CD integration
+5. **Self-hostable + cheap hosted** ($9/mo Pro vs $49/mo competitors)
+6. **Multi-project/org support** for teams
+
+### Future Stack Considerations (Not Yet Implemented)
+These were researched and may be adopted in future phases:
+- **tRPC**: For type-safe dashboard API (replacing REST for internal use)
+- **Better Auth**: For authentication (email/password + GitHub OAuth)
+- **Tiptap**: For the rich block editor (ProseMirror-based)
+- **Shadcn/ui**: For dashboard UI components (copy-paste, no lock-in)
