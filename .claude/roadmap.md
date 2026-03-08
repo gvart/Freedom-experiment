@@ -34,7 +34,7 @@
 - [x] Sessions table + migration
 - [x] CORS configured with credentials for cookie auth
 
-## Phase 4: Self-Hosting & Deploy (Session 4) — IN PROGRESS
+## Phase 4: Self-Hosting & Deploy (Sessions 4-5) — IN PROGRESS
 - [x] Environment variable configuration (centralized config.ts module)
 - [x] Dockerfile + docker-compose (multi-stage build, single-command self-hosting)
 - [x] .env.example + .dockerignore
@@ -43,8 +43,10 @@
 - [x] Static file serving (API serves built web assets in production)
 - [x] Fixed hardcoded localhost URL in dashboard
 - [x] README with project overview, setup, Docker, and API docs
-- [ ] Deploy to Fly.io
 - [x] Landing page (server-rendered at /, hero + features + pricing + widget code demo)
+- [x] "Powered by Patchwork" branding on public pages and widget
+- [x] fly.toml deployment config (auto-stop, shared-cpu-1x, 256MB, volume mount)
+- [~] Deploy to Fly.io (config ready, needs `fly launch` + `fly deploy`)
 
 ## Phase 5: Widget & Growth Features — IN PROGRESS
 - [x] Embeddable widget (7KB minified, Shadow DOM, floating button + slide-out panel)
@@ -53,19 +55,15 @@
 - [x] Widget embed code in dashboard project settings (copy-to-clipboard)
 - [ ] Email subscriber notifications (via Resend)
 - [ ] GitHub Releases sync (auto-import)
-- [ ] Custom domain support
 - [ ] Search across entries
 - [ ] Analytics (views per entry)
-- [ ] Team/multi-user (organizations, roles: owner/admin/editor)
 
-## Phase 6: Deploy & Monetize
-- [ ] Dockerfile + docker-compose for self-hosting
-- [ ] Deploy to Fly.io (auto-stop machine, $2-5/mo)
-- [ ] Turso for production database
-- [ ] Landing page at / (marketing for Patchwork itself)
+## Phase 6: Monetize & Scale
+- [ ] Turso for production database (replace local SQLite in hosted mode)
 - [ ] Stripe integration: Pro $9/mo, Team $29/mo
 - [ ] Plan enforcement middleware (org.plan field)
-- [ ] "Powered by Patchwork" footer on all public pages (removable on paid plans)
+- [ ] Team/multi-user (organizations, roles: owner/admin/editor)
+- [ ] Custom domain support
 
 ## Revenue Targets
 - Month 1-3: Free users only, building product and audience
