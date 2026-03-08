@@ -55,8 +55,11 @@ export const api = {
       }),
   },
   entries: {
-    list: (slug: string, page = 1) =>
-      request<PaginatedResponse<Entry>>(`/projects/${slug}/entries?page=${page}`),
+    list: (slug: string, page = 1, q?: string) => {
+      const params = new URLSearchParams({ page: String(page) });
+      if (q) params.set("q", q);
+      return request<PaginatedResponse<Entry>>(`/projects/${slug}/entries?${params}`);
+    },
     get: (slug: string, id: string) =>
       request<ApiResponse<Entry>>(`/projects/${slug}/entries/${id}`),
     create: (

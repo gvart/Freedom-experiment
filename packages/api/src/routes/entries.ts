@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { eq, desc, and, isNotNull } from "drizzle-orm";
+import { eq, desc, and, isNotNull, like, or, sql } from "drizzle-orm";
 import { ulid } from "ulid";
 import {
   createEntrySchema,
@@ -34,7 +34,8 @@ async function getCategoriesForEntry(entryId: string): Promise<Category[]> {
 
 function serializeEntry(
   row: typeof schema.entries.$inferSelect,
-  categories: Category[]
+  categories: Category[],
+  viewCount?: number
 ) {
   return {
     id: row.id,
@@ -45,6 +46,7 @@ function serializeEntry(
     publishedAt: row.publishedAt ? toISOString(row.publishedAt) : null,
     createdAt: toISOString(row.createdAt),
     updatedAt: toISOString(row.updatedAt),
+    viewCount: viewCount ?? 0,
   };
 }
 
@@ -59,11 +61,23 @@ app.get("/", async (c) => {
   const offset = (page - 1) * limit;
 
   const publishedOnly = query.published === "true";
+  const searchQuery = query.q?.trim();
 
-  let condition = eq(schema.entries.projectId, project.id);
+  const conditions = [eq(schema.entries.projectId, project.id)];
   if (publishedOnly) {
-    condition = and(condition, isNotNull(schema.entries.publishedAt))!;
+    conditions.push(isNotNull(schema.entries.publishedAt));
   }
+  if (searchQuery) {
+    const pattern = `%${searchQuery}%`;
+    conditions.push(
+      or(
+        like(schema.entries.title, pattern),
+        like(schema.entries.content, pattern)
+      )!
+    );
+  }
+
+  const condition = and(...conditions);
 
   const rows = await db
     .select()
@@ -83,7 +97,12 @@ app.get("/", async (c) => {
   const entriesWithCategories = await Promise.all(
     rows.map(async (row) => {
       const categories = await getCategoriesForEntry(row.id);
-      return serializeEntry(row, categories);
+      const viewCountResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(schema.entryViews)
+        .where(eq(schema.entryViews.entryId, row.id))
+        .get();
+      return serializeEntry(row, categories, viewCountResult?.count ?? 0);
     })
   );
 

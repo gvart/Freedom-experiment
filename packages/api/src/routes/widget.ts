@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { eq, desc, and, isNotNull } from "drizzle-orm";
-import { markdownToHtml } from "@patchwork/core";
+import { ulid } from "ulid";
+import { markdownToHtml, nowUnix } from "@patchwork/core";
 import type { Category } from "@patchwork/core";
 import { db, schema } from "../db/index.js";
 
@@ -61,6 +62,27 @@ app.get("/:projectId", async (c) => {
     },
     entries,
   });
+});
+
+// Track a view for an entry — public, fire-and-forget
+app.post("/track/:entryId", async (c) => {
+  const entryId = c.req.param("entryId");
+
+  const entry = await db
+    .select({ id: schema.entries.id })
+    .from(schema.entries)
+    .where(eq(schema.entries.id, entryId))
+    .get();
+
+  if (!entry) return c.json({ ok: false }, 404);
+
+  await db.insert(schema.entryViews).values({
+    id: ulid(),
+    entryId,
+    createdAt: nowUnix(),
+  });
+
+  return c.json({ ok: true });
 });
 
 export default app;

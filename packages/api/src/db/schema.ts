@@ -67,3 +67,11 @@ export const sessions = sqliteTable("sessions", {
   expiresAt: integer("expires_at").notNull(),
   createdAt: integer("created_at").notNull(),
 });
+
+export const entryViews = sqliteTable("entry_views", {
+  id: text("id").primaryKey(),
+  entryId: text("entry_id")
+    .notNull()
+    .references(() => entries.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at").notNull(),
+});

@@ -35,8 +35,8 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Session 6, 2026-03-08 — fly.toml config, session boundary rules, roadmap cleanup, ownership docs
-**Next up**: Deploy to Fly.io (`fly launch` + `fly deploy`), then Phase 5 features (email notifications, GitHub sync, search, analytics)
+**Last completed**: Session 7, 2026-03-08 — Search across entries + Analytics (view tracking)
+**Next up**: Deploy to Fly.io (`fly launch` + `fly deploy`), then remaining Phase 5 (email notifications via Resend, GitHub Releases sync)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far
@@ -46,7 +46,7 @@ bun run lint             # Lint all packages
 - `packages/api`: Hono server with Drizzle ORM, full CRUD endpoints, public changelog pages, RSS feeds, auth (session cookies + API keys), widget data API
 - `packages/web`: React dashboard with auth (login/register), project/entry management, markdown editor with preview, publish/unpublish workflow, API key management, toast notifications
 - `packages/widget`: Embeddable changelog widget (7KB, Shadow DOM, floating button + slide-out panel, notification badge)
-- Database: SQLite with projects, entries, entry_categories, subscribers, api_keys, users, sessions tables
+- Database: SQLite with projects, entries, entry_categories, entry_views, subscribers, api_keys, users, sessions tables
 
 ## Project Vision
 
