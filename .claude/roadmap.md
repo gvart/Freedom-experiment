@@ -46,10 +46,10 @@
 - [ ] Deploy to Fly.io
 - [ ] Landing page (patchwork.sh)
 
-## Phase 5: Widget & Growth Features
-- [ ] Embeddable widget (<10KB, Shadow DOM, floating button + slide-out panel)
-- [ ] Widget endpoint: GET /widget.js serves built widget
-- [ ] Widget data endpoint: GET /api/v1/widget/:projectId
+## Phase 5: Widget & Growth Features — IN PROGRESS
+- [x] Embeddable widget (7KB minified, Shadow DOM, floating button + slide-out panel)
+- [x] Widget endpoint: GET /widget.js serves built widget
+- [x] Widget data endpoint: GET /api/v1/widget/:projectId with open CORS
 - [ ] Email subscriber notifications (via Resend)
 - [ ] GitHub Releases sync (auto-import)
 - [ ] Custom domain support

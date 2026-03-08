@@ -35,16 +35,17 @@ bun run lint             # Lint all packages
 
 ## Current Session Status
 
-**Last completed**: Phase 4 (Self-Hosting) — Session 4, 2026-03-08 (Docker, env config, README)
-**Next up**: Phase 4 remainder (Fly.io deploy, landing page) then Phase 5 (Widget)
+**Last completed**: Phase 5 (Widget) — Session 5, 2026-03-08 (embeddable widget, widget API, widget.js serving)
+**Next up**: Phase 4 remainder (Fly.io deploy, landing page), then Phase 5 remainder (email notifications, GitHub sync, search, analytics)
 **See**: `.claude/roadmap.md` for full roadmap, `.claude/decisions.md` for research insights
 
 ## What Exists So Far
 
 - Monorepo scaffold (Bun workspaces + Turborepo + Biome)
 - `packages/core`: Shared Zod schemas + TypeScript types + markdown-to-HTML converter
-- `packages/api`: Hono server with Drizzle ORM, full CRUD endpoints, public changelog pages, RSS feeds, auth (session cookies + API keys)
+- `packages/api`: Hono server with Drizzle ORM, full CRUD endpoints, public changelog pages, RSS feeds, auth (session cookies + API keys), widget data API
 - `packages/web`: React dashboard with auth (login/register), project/entry management, markdown editor with preview, publish/unpublish workflow, API key management, toast notifications
+- `packages/widget`: Embeddable changelog widget (7KB, Shadow DOM, floating button + slide-out panel, notification badge)
 - Database: SQLite with projects, entries, entry_categories, subscribers, api_keys, users, sessions tables
 
 ## Project Vision
