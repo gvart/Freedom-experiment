@@ -46,7 +46,8 @@
 - [x] Landing page (server-rendered at /, hero + features + pricing + widget code demo)
 - [x] "Powered by Patchwork" branding on public pages and widget
 - [x] fly.toml deployment config (auto-stop, shared-cpu-1x, 256MB, volume mount)
-- [~] Deploy to Fly.io (config ready, needs `fly launch` + `fly deploy`)
+- [x] CI/CD pipeline (GitHub Actions: lint/test/build on PRs, auto-deploy to Fly.io on push to main)
+- [~] Deploy to Fly.io (config ready, needs `fly launch` + `FLY_API_TOKEN` secret in GitHub)
 
 ## Phase 5: Widget & Growth Features — COMPLETE
 - [x] Embeddable widget (7KB minified, Shadow DOM, floating button + slide-out panel)
